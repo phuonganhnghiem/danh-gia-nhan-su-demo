@@ -37,7 +37,7 @@ body {
     line-height: 1.5;
 }
 
-/* CSS GỐC CỦA BẠN BÊN DƯỚI */
+/* CSS CHÍNH CỦA HỆ THỐNG CÓ KÈM HIỆU ỨNG */
 *{box-sizing:border-box;margin:0;padding:0}
 .app{max-width:1180px;margin:0 auto;padding:1.5rem 1rem;font-family:var(--font-sans); background: var(--color-background-primary); min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05);}
 .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:.5px solid var(--color-border-tertiary)}
@@ -60,7 +60,7 @@ body {
 .role-title{font-size:18px;font-weight:500;margin-bottom:6px}
 .role-sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:2rem}
 .role-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.role-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:14px;padding:1.75rem 1.5rem;cursor:pointer;text-align:left}
+.role-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:14px;padding:1.75rem 1.5rem;cursor:pointer;text-align:left; transition: all 0.2s;}
 .role-card:hover{border-color:#1D9E75; box-shadow: 0 4px 12px rgba(29, 158, 117, 0.1);}
 .role-card *{pointer-events:none}
 .role-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
@@ -78,7 +78,7 @@ body {
 .persona-title{font-size:18px;font-weight:500;margin-bottom:6px}
 .persona-sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:2rem}
 .persona-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.persona-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:14px;padding:1.5rem 1.25rem;cursor:pointer;text-align:left}
+.persona-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:14px;padding:1.5rem 1.25rem;cursor:pointer;text-align:left; transition: all 0.2s;}
 .persona-card:hover{border-color:#185FA5; box-shadow: 0 4px 12px rgba(24, 95, 165, 0.1);}
 .persona-card *{pointer-events:none}
 .persona-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
@@ -361,6 +361,14 @@ body {
 .proj-mini-card{background:var(--color-background-secondary);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:12px}
 .proj-mini-name{font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
 .proj-mini-meta{color:var(--color-text-secondary);font-size:11px;line-height:1.5}
+
+/* CSS CHO PHẦN IDP (KẾ HOẠCH PHÁT TRIỂN CÁ NHÂN) CỦA V8 */
+.idp-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:var(--color-background-secondary);margin-bottom:6px;font-size:12px; transition: background 0.2s;}
+.idp-item:hover{background: var(--color-border-tertiary);}
+.idp-item-name{color:var(--color-text-primary);flex:1}
+.idp-item-gap{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#854F0B;white-space:nowrap}
+.idp-empty{padding:14px;text-align:center;font-size:12px;color:var(--color-text-secondary);background:#E1F5EE;border-radius:8px}
+
 </style>
 </head>
 <body>
@@ -428,6 +436,22 @@ body {
 <div class="score-card-row" style="margin-top:1.5rem"><div class="score-card task"><div class="score-card-label">Task Execution</div><div class="score-card-val" id="empResultTaskScore">—</div><div class="score-card-weight">60%</div></div><div class="score-card skill"><div class="score-card-label">Skill Proficiency</div><div class="score-card-val" id="empResultSkillScore">—</div><div class="score-card-weight">40%</div></div><div class="score-card summary"><div class="score-card-label">Tổng kết</div><div class="score-card-val" id="empResultSummaryScore">—</div><div class="score-card-weight">Task×.6+Skill×.4</div></div></div>
 <div class="rank-band"><div class="rank-current"><div class="rank-current-lbl">Xếp loại chính thức</div><div class="rank-badge" id="empResultRankBadge">—</div></div><div class="rank-info"><span id="empResultRankInfo">—</span></div></div>
 <div class="compare-row"><div class="compare-side"><div class="compare-side-lbl">Kỳ trước</div><div class="compare-side-val" id="empResultPrevScore">—</div></div><div class="compare-arrow"><i class="ti ti-arrow-right"></i><div class="compare-delta" id="empResultDelta">—</div></div><div class="compare-side"><div class="compare-side-lbl">Kỳ này</div><div class="compare-side-val" id="empResultCurrScore">—</div></div></div>
+<div class="chart-card" style="margin-bottom:1.5rem"><div class="chart-title">Tổng kết Task → Skill so với kỳ trước</div><div class="chart-sub">So sánh điểm Task và Skill giữa 2 kỳ đánh giá</div><div style="position:relative;height:220px"><canvas id="empCompareBar">Compare</canvas></div></div>
+<div class="card" id="empIdpHeaderCard"><div class="card-title" id="empIdpTitle">—</div><div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6" id="empIdpDesc">—</div></div>
+<div class="radar-card" id="empIdpTaskCard" style="display:none">
+<div class="radar-title">Gợi ý cải thiện — Task Execution</div>
+<div class="radar-sub" id="empIdpTaskSub">—</div>
+<div class="radar-legend"><span><span class="leg-sq" style="background:#B5D4F4"></span>Hiện tại</span><span><span class="leg-sq" style="background:#EF9F27"></span>Mục tiêu</span></div>
+<div style="position:relative;height:360px"><canvas id="empIdpRadarTask">IDP Task</canvas></div>
+<div id="empIdpTaskList" style="margin-top:12px"></div>
+</div>
+<div class="radar-card" id="empIdpSkillCard" style="display:none">
+<div class="radar-title">Gợi ý cải thiện — Skill Proficiency</div>
+<div class="radar-sub" id="empIdpSkillSub">—</div>
+<div class="radar-legend"><span><span class="leg-sq" style="background:#9FE1CB"></span>Hiện tại</span><span><span class="leg-sq" style="background:#EF9F27"></span>Mục tiêu</span></div>
+<div style="position:relative;height:360px"><canvas id="empIdpRadarSkill">IDP Skill</canvas></div>
+<div id="empIdpSkillList" style="margin-top:12px"></div>
+</div>
 </div>
 <div class="info-card"><i class="ti ti-lock"></i><span id="empTrackNote">—</span></div>
 </div>
@@ -569,6 +593,9 @@ const RAWS=[['ARC-S1','Tiếng Anh','3%',.03],['ARC-S2','Tin học văn phòng',
 const SKILLS=RAWS.map(r=>({code:r[0],vi:r[1],wPct:r[2],w:r[3],items:['Hạng mục tham chiếu 1','Hạng mục tham chiếu 2']}));
 
 const RANKS=[{code:'ARC01',lvl:1,min:1.10,max:1.84,c:'#888780',t:'Kiến trúc sư'},{code:'ARC02',lvl:2,min:1.84,max:2.67,c:'#378ADD',t:'Kiến trúc sư'},{code:'ARC03',lvl:3,min:2.67,max:3.43,c:'#1D9E75',t:'Kiến trúc sư'},{code:'ARC04',lvl:4,min:3.43,max:4.19,c:'#EF9F27',t:'Chủ trì thiết kế kiến trúc'},{code:'ARC05',lvl:5,min:4.19,max:5.00,c:'#E24B4A',t:'Chủ trì thiết kế kiến trúc'}];
+
+const TASK_LVL_REQ={'ARC-T1':[0,1,2,3,4],'ARC-T2':[0,1,2,3,4],'ARC-T3':[0,1,2,3,4],'ARC-T4':[0,1,2,3,4],'ARC-T5':[0,1,2,3,4],'ARC-T6':[0,1,2,3,4],'ARC-T7':[1,2,3,3,4],'ARC-T8':[1,2,3,3,3],'ARC-T9':[1,2,3,3,4],'ARC-T10':[1,2,3,4,4],'ARC-T11':[1,2,3,4,4],'ARC-T12':[1,2,3,4,5],'ARC-T13':[1,2,3,4,5],'ARC-T14':[1,2,3,4,5],'ARC-T15':[2,2,3,4,5],'ARC-T16':[1,2,3,4,5],'ARC-T17':[2,2,3,4,4],'ARC-T18':[1,2,3,3,4],'ARC-T19':[1,2,2,3,4],'ARC-T20':[1,2,2,3,4]};
+const SKILL_LVL_REQ={'ARC-S1':[1,2,2,2,2],'ARC-S2':[2,2,3,3,3],'ARC-S3':[2,2,3,3,4],'ARC-S4':[1,2,3,4,5],'ARC-S5':[0,1,2,3,4],'ARC-S6':[0,1,2,3,4],'ARC-S7':[1,2,3,3,4],'ARC-S8':[1,2,2,3,3],'ARC-S9':[1,2,2,2,2],'ARC-S10':[1,1,2,2,3],'ARC-S11':[1,1,2,2,3],'ARC-S12':[1,2,2,3,4],'ARC-S13':[2,2,2,3,4],'ARC-S14':[1,2,2,3,4],'ARC-S15':[1,2,3,4,5],'ARC-S16':[1,2,3,4,5],'ARC-S17':[2,2,3,4,5],'ARC-S18':[1,2,3,4,4],'ARC-S19':[0,1,2,3,3],'ARC-S20':[0,1,2,2,3],'ARC-S21':[0,1,2,2,3],'ARC-S22':[0,1,2,2,3]};
 function getRank(s){for(const r of RANKS)if(s>=r.min&&s<=r.max)return r;return s<RANKS[0].min?RANKS[0]:RANKS[4];}
 const SAL={1:[10e6,11e6,11.5e6,12e6],2:[13e6,13.5e6,14e6,14.5e6],3:[15e6,15.5e6,16.5e6,17.5e6],4:[18.5e6,19.5e6,20.5e6,22e6],5:[22.5e6,24.5e6,26.5e6,28.5e6]};
 function fmtVND(n){return Math.round(n).toLocaleString('vi-VN')+' đ';}
@@ -820,8 +847,86 @@ function renderEmpTrack(){
       document.getElementById('empResultCurrScore').textContent=summaryScore.toFixed(2);
       const d=summaryScore-1.75;const de=document.getElementById('empResultDelta');
       de.className='compare-delta '+(d>=0?'delta-up':'delta-down');de.textContent=(d>=0?'▲ +':'▼ ')+Math.abs(d).toFixed(2);
+      renderEmpCompareBar(taskScore,skillScore);
+      renderEmpIdp(rank,st);
       document.getElementById('empResultSection').style.display='';
     }
+  }
+}
+let empBarChart=null;
+function renderEmpCompareBar(taskScore,skillScore){
+  if(empBarChart)empBarChart.destroy();
+  const prevTask=1.40,prevSkill=2.20;
+  empBarChart=new Chart(document.getElementById('empCompareBar'),{
+    type:'bar',
+    data:{labels:['Task Execution','Skill Proficiency'],datasets:[
+      {label:'Kỳ trước',data:[prevTask,prevSkill],backgroundColor:'#B4B2A9',borderRadius:4},
+      {label:'Kỳ này',data:[taskScore,skillScore],backgroundColor:'#1D9E75',borderRadius:4}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y.toFixed(2)}}},scales:{y:{beginAtZero:true,max:5,ticks:{font:{size:10}}},x:{ticks:{font:{size:11}}}}}
+  });
+}
+let idpRT=null,idpRS=null;
+function renderEmpIdp(curRank,st){
+  const titleEl=document.getElementById('empIdpTitle'),descEl=document.getElementById('empIdpDesc');
+  const taskCard=document.getElementById('empIdpTaskCard'),skillCard=document.getElementById('empIdpSkillCard');
+  const taskArr=st.dirTask||st.taskMgr,skillArr=st.dirSkill||st.skillMgr;
+  let targetIdx,isMaxOut;
+  if(curRank.lvl>=5){targetIdx=4;isMaxOut=true;}
+  else{targetIdx=curRank.lvl;isMaxOut=false;}
+  if(isMaxOut){
+    titleEl.innerHTML='<i class="ti ti-trophy" aria-hidden="true" style="color:#EF9F27;margin-right:5px"></i>Hoàn thiện chuyên sâu (đã đạt ARC05)';
+    descEl.textContent='Bạn đã đạt cấp cao nhất trong khung năng lực — không còn mốc lên cấp/lương tiếp theo. Dưới đây là các Task/Skill chưa đạt mức tối đa (L5), là cơ hội để hoàn thiện chuyên môn toàn diện hơn và đảm nhận vai trò cố vấn, dẫn dắt người khác.';
+  } else {
+    const nextRank=RANKS[curRank.lvl];
+    titleEl.innerHTML='<i class="ti ti-trending-up" aria-hidden="true" style="color:#1D9E75;margin-right:5px"></i>Gợi ý để lên '+nextRank.code+' ('+nextRank.t+')';
+    descEl.textContent='So sánh điểm hiện tại với mức yêu cầu tối thiểu của '+nextRank.code+'. Tập trung cải thiện các Task/Skill còn thiếu điểm dưới đây sẽ giúp bạn tiến gần hơn tới cấp tiếp theo.';
+  }
+  const taskGaps=[],taskLabels=[],taskCur=[],taskTgt=[];
+  allMinors.forEach((m,i)=>{
+    const req=TASK_LVL_REQ[m.code];if(!req)return;
+    const tgt=isMaxOut?5:req[targetIdx];
+    const cur=taskArr[i];
+    if(cur<tgt){taskGaps.push({code:m.code,vi:m.vi,cur,tgt});taskLabels.push(m.code.replace('ARC-','')+' '+m.vi);taskCur.push(cur);taskTgt.push(tgt);}
+  });
+  const skillGaps=[],skillLabels=[],skillCur=[],skillTgt=[];
+  SKILLS.forEach((s,i)=>{
+    const req=SKILL_LVL_REQ[s.code];if(!req)return;
+    const tgt=isMaxOut?5:req[targetIdx];
+    const cur=skillArr[i];
+    if(cur<tgt){skillGaps.push({code:s.code,vi:s.vi,cur,tgt});skillLabels.push(s.code.replace('ARC-','')+' '+s.vi);skillCur.push(cur);skillTgt.push(tgt);}
+  });
+  if(idpRT)idpRT.destroy();if(idpRS)idpRS.destroy();
+  const subText=n=>n+' mục cần cải thiện';
+  if(taskGaps.length){
+    taskCard.style.display='';
+    document.getElementById('empIdpTaskSub').textContent=subText(taskGaps.length);
+    const ro={responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:5,ticks:{stepSize:1,font:{size:10}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': L'+c.parsed.r}}}};
+    idpRT=new Chart(document.getElementById('empIdpRadarTask'),{type:'radar',data:{labels:taskLabels,datasets:[
+      {label:'Hiện tại',data:taskCur,backgroundColor:'rgba(181,212,244,.3)',borderColor:'#B5D4F4',pointRadius:3},
+      {label:'Mục tiêu',data:taskTgt,backgroundColor:'rgba(239,159,39,.15)',borderColor:'#EF9F27',borderWidth:2,pointRadius:3,borderDash:[4,3]}
+    ]},options:ro});
+    const tw=document.getElementById('empIdpTaskList');tw.innerHTML='';
+    taskGaps.forEach(g=>{const d=document.createElement('div');d.className='idp-item';d.innerHTML='<span class="idp-item-name">'+g.code+' — '+g.vi+'</span><span class="idp-item-gap">L'+g.cur+' → L'+g.tgt+' <i class="ti ti-arrow-up" aria-hidden="true"></i></span>';tw.appendChild(d);});
+  } else {
+    taskCard.style.display='';
+    document.getElementById('empIdpTaskSub').textContent='Đã đạt hoặc vượt mức yêu cầu ở tất cả Task';
+    document.getElementById('empIdpTaskList').innerHTML='<div class="idp-empty"><i class="ti ti-circle-check" aria-hidden="true" style="margin-right:5px"></i>Không có Task nào cần cải thiện thêm.</div>';
+  }
+  if(skillGaps.length){
+    skillCard.style.display='';
+    document.getElementById('empIdpSkillSub').textContent=subText(skillGaps.length);
+    const ro={responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:5,ticks:{stepSize:1,font:{size:10}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': L'+c.parsed.r}}}};
+    idpRS=new Chart(document.getElementById('empIdpRadarSkill'),{type:'radar',data:{labels:skillLabels,datasets:[
+      {label:'Hiện tại',data:skillCur,backgroundColor:'rgba(159,225,203,.3)',borderColor:'#9FE1CB',pointRadius:3},
+      {label:'Mục tiêu',data:skillTgt,backgroundColor:'rgba(239,159,39,.15)',borderColor:'#EF9F27',borderWidth:2,pointRadius:3,borderDash:[4,3]}
+    ]},options:ro});
+    const sw=document.getElementById('empIdpSkillList');sw.innerHTML='';
+    skillGaps.forEach(g=>{const d=document.createElement('div');d.className='idp-item';d.innerHTML='<span class="idp-item-name">'+g.code+' — '+g.vi+'</span><span class="idp-item-gap">L'+g.cur+' → L'+g.tgt+' <i class="ti ti-arrow-up" aria-hidden="true"></i></span>';sw.appendChild(d);});
+  } else {
+    skillCard.style.display='';
+    document.getElementById('empIdpSkillSub').textContent='Đã đạt hoặc vượt mức yêu cầu ở tất cả Skill';
+    document.getElementById('empIdpSkillList').innerHTML='<div class="idp-empty"><i class="ti ti-circle-check" aria-hidden="true" style="margin-right:5px"></i>Không có Skill nào cần cải thiện thêm.</div>';
   }
 }
 
